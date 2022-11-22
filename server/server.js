@@ -20,7 +20,9 @@ const Chapter_Model= mongoose.model('Chapter_List', ChapterSchema);
 const QuestionSchema = new mongoose.Schema({
     question: String,
     type: String,
-    chapter_id: String
+    chapter_id: String,
+    answer: String
+    
   });
   const Question_Model= mongoose.model('Question_Detail', QuestionSchema);
 // const bodyParser = require('body-parser')
@@ -165,6 +167,15 @@ app.get("/delete_question/:question_id",(req,res)=>{
             question_id:req.params.question_id
         })
     })
+})
+
+app.post("/question_update",(req,res)=>{
+    let post_data = JSON.parse(Object.keys(req.body)[0])
+    Question_Model.updateOne({_id:ObjectId(post_data._id)},{question:post_data.question,answer:post_data.answer},function(){
+
+        res.send("Question Updated Successfully");
+    })
+    // console.log()
 })
 
 app.listen(5000,()=>{
