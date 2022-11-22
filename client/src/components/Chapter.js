@@ -5,8 +5,12 @@ import { useParams, Link } from "react-router-dom";
 
 function Chapter() {
   const [show, setShow] = useState(false);
+  const [filterQuesType, setfilterQuesType] = useState("all");
+  const [filtershow, setfilterShow] = useState(false);
   const handleClose = () => setShow(false);
+  const filterhandleClose = () => setfilterShow(false);
   const handleShow = () => setShow(true);
+  const filterhandleShow = () => setfilterShow(true);
     const[chapter_details,setChapterDetails] = useState({})
     const[question_details,setQuestionDetails] = useState([])
     let params = useParams();
@@ -58,13 +62,39 @@ function Chapter() {
   }
  }
 
+ const filterQuestion = (e) => {
+  setfilterQuesType(e.target.value)
+  if(e.target.value == 'all'){
+    let all_cards = document.getElementsByClassName("card")
+    for(let i=0;i<all_cards.length;i++){
+
+        all_cards[i].style.display = 'block'
+  
+      
+    }
+    return true;
+  }
+  let all_types = document.getElementsByClassName("type")
+  let all_cards = document.getElementsByClassName("card")
+  for(let i=0;i<all_types.length;i++){
+    if(all_types[i].innerText == e.target.value){
+      all_cards[i].style.display = 'block'
+    }
+    else{
+      all_cards[i].style.display = 'none'
+
+    }
+  }
+// alert(e.target.value)
+ }
 
   return (
     <>
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossOrigin="anonymous" />
-  <h2 className="text-center">
+      <div className='container-fluid' style={{backgroundColor:"#d3d7e7",height:'100vh',backgroundImage:`url("/quesbgimg_2.jpg")`,backgroundSize:'cover'}}>
+  <h1 className="text-center" style={{color:'white'}}>
     {chapter_details.name}
-  </h2>
+  </h1>
   <center>
 
 
@@ -87,6 +117,7 @@ function Chapter() {
           <option value="ns">---- Select Question Type ----</option>
           <option value="Single Correct">Single Correct</option>
           <option value="Multiple Correct">Multiple Correct</option>
+          <option value="Subjective">Subjective</option>
         </select>
         {/* <input type="text" class="form-control" placeholder="Enter Question Type" aria-label="Username" aria-describedby="basic-addon1" id="new_chapter_name" /> */}
       </div>
@@ -102,14 +133,44 @@ function Chapter() {
         </Modal.Footer>
       </Modal>
 
+      <Modal show={filtershow} onHide={filterhandleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Filter Questions</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <div className="input-group mb-3">
+        <span className="input-group-text" id="basic-addon1">T</span>
+        <select name="" id="filter_qtype" className="form-control" onChange={filterQuestion} value={filterQuesType}>
+          <option value="all">All types</option>
+          <option value="Single Correct">Single Correct</option>
+          <option value="Multiple Correct">Multiple Correct</option>
+          <option value="Subjective">Subjective</option>
+        </select>
+        {/* <input type="text" class="form-control" placeholder="Enter Question Type" aria-label="Username" aria-describedby="basic-addon1" id="new_chapter_name" /> */}
+      </div>
+
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={filterhandleClose}>
+            Close
+          </Button>
+          {/* <Button variant="primary" onClick = {addQuestion}>
+            Add
+          </Button> */}
+        </Modal.Footer>
+      </Modal>
 
 
 
-      <h5 className="text-center">
+
+      {/* <h5 className="text-center">
       Chapter Id :- {params.chapter_id}
-      </h5>
+      </h5> */}
+      <Button variant="primary mx-2" onClick={filterhandleShow}>
+        Filter Question
+      </Button>
       <Button variant="primary" onClick={handleShow}>
-        Add new Question
+        Add new question
       </Button>
   </center>
 
@@ -123,12 +184,13 @@ function Chapter() {
     // <div className="col">
     <div className="card my-2 mx-4" style={{width:"15rem"}} key={e}>
   <div className="card-body">
-    <h5 className="card-title">{val.question}</h5>
-    <h6 className="card-title">{val.type}</h6>
-    <Link to={"/question/"+val._id}><Button variant="primary" className='mx-2'>
+    <h4 className="card-title"><b>{val.question}</b></h4>
+    <h6 className="card-title my-2" style={{color:"grey"}}>Question Type: <span className="type">{val.type}</span></h6>
+    <h6 className="card-title my-2" style={{color:"grey"}}>Question ID: {val._id}</h6>
+    <Link to={"/question/"+val._id}><Button variant="primary"  style={{fontSize:'17px'}}>
             Open
           </Button></Link>
-          <Button variant="danger" onClick={()=>{deleteQuestion(val._id)}}>
+          <Button  className='mx-2' variant="danger"  style={{fontSize:'17px'}} onClick={()=>{deleteQuestion(val._id)}}>
             Delete
           </Button>
     {/* <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> */}
@@ -147,7 +209,7 @@ function Chapter() {
   )
 })}
   </div>
-
+  </div>
 
 
     </>
