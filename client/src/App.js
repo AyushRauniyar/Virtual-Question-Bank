@@ -12,10 +12,11 @@ Navigate
 import Home from "./components/Home";
 // import About component
 import Chapter from "./components/Chapter";
-import Deleted from "./components/Deleted";
+// import Deleted from "./components/Deleted";
 import Question from "./components/Question";
 
 function App() {
+
 return (
 	<>
 	{/* This is the alias of BrowserRouter i.e. Router */}
@@ -24,7 +25,7 @@ return (
 		{/* This route is for home component
 		with exact path "/", in component props
 		we passes the imported component*/}
-		<Route exact path="/" element={<Home />} />
+		<Route exact path="/" element={<Home/>} />
 			
 		{/* This route is for about component
 		with exact path "/about", in component
